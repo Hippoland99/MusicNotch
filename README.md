@@ -41,14 +41,14 @@ A minimal, ultra-clean macOS media controller living seamlessly inside and under
 No bulky 15 GB Xcode IDE required — build the standalone `.app` directly from your terminal:
 
 ```bash
-# 1. Repository klonen
+# 1. Clone repository
 git clone https://github.com/Hippoland99/MusicNotch.git
 cd MusicNotch
 
-# 2. App-Bundle Struktur anlegen
+# 2. Create app bundle structure
 mkdir -p MusicNotch.app/Contents/MacOS
 
-# 3. Minimales Info.plist erstellen (damit macOS die App erkennt)
+# 3. Create minimal Info.plist (required by macOS Launch Services)
 cat << 'PLIST' > MusicNotch.app/Contents/Info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -64,11 +64,11 @@ cat << 'PLIST' > MusicNotch.app/Contents/Info.plist
 </plist>
 PLIST
 
-# 4. Binary kompilieren & signieren
+# 4. Compile binary & ad-hoc sign
 swiftc -parse-as-library -O *.swift -o MusicNotch.app/Contents/MacOS/MusicNotch
 codesign --force --deep --sign - MusicNotch.app
 
-# 5. In die Programme verschieben & starten
+# 5. Move to Applications & launch
 cp -r MusicNotch.app /Applications/
 open /Applications/MusicNotch.app
 ```
