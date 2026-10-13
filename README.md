@@ -18,7 +18,7 @@ A minimal, ultra-clean macOS media controller living seamlessly inside and under
 
 - **Seamless Notch Integration:** Melts directly into the MacBook hardware bezel with Apple-like continuous corner radii and smooth spring physics.
 - **Zero Distraction:** Stays completely silent and invisible on track changes. Expands gracefully **only** on deliberate hover.
-- **Accidental-Trigger Protection:** Built-in 180ms dwell filter so swooshing across the notch (e.g. to click Safari's URL/search bar) won't trigger the island.
+- **Accidental-Trigger Protection:** Built-in 180ms dwell filter so swooshing across the notch won't trigger the island.
 - **Live Album Artwork:** Automatically fetches and renders high-res covers from Spotify, Apple Music, and YouTube Music.
 - **Universal Player:** Controls Spotify, Apple Music, and Safari (`music.youtube.com`) with instant responses via macOS `DistributedNotificationCenter`.
 - **Pure Background Accessory:** Runs without a Dock icon or App Switcher clutter (`LSUIElement`). Never steals keyboard focus from your IDE or browser.
@@ -38,19 +38,37 @@ A minimal, ultra-clean macOS media controller living seamlessly inside and under
 
 ## 🚀 Installation & Build
 
-No bulky 15 GB Xcode IDE required — build the standalone `.app` directly from your terminal using Apple's Command Line Tools:
+No bulky 15 GB Xcode IDE required — build the standalone `.app` directly from your terminal:
 
 ```bash
-# 1. Clone the repository
+# 1. Repository klonen
 git clone https://github.com/Hippoland99/MusicNotch.git
 cd MusicNotch
 
-# 2. Compile Release Binary
+# 2. App-Bundle Struktur anlegen
 mkdir -p MusicNotch.app/Contents/MacOS
+
+# 3. Minimales Info.plist erstellen (damit macOS die App erkennt)
+cat << 'PLIST' > MusicNotch.app/Contents/Info.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>MusicNotch</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.hippoland.MusicNotch</string>
+    <key>LSUIElement</key>
+    <true/>
+</dict>
+</plist>
+PLIST
+
+# 4. Binary kompilieren & signieren
 swiftc -parse-as-library -O *.swift -o MusicNotch.app/Contents/MacOS/MusicNotch
 codesign --force --deep --sign - MusicNotch.app
 
-# 3. Move to Applications & Launch
+# 5. In die Programme verschieben & starten
 cp -r MusicNotch.app /Applications/
 open /Applications/MusicNotch.app
 ```
